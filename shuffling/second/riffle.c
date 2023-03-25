@@ -3,13 +3,57 @@
 #include <string.h>
 #include <time.h>
 
-void riffle_once(void *L, int size, int count, void *work) {
-    // srand(time(NULL)); 
+
+int size_of_array(void *L, int size) {
+    int count = 0;
+    
+    if (size == sizeof(char)) {
+        char *char_ptr = L;
+        while (*char_ptr != '\0') {
+            count++;
+            char_ptr++;
+        }
+    } else if (size == sizeof(int)) {
+        int *int_ptr = L;
+        while (*int_ptr != 0) {
+            count++;
+            int_ptr++;
+        }
+    } else if (size == sizeof(char*)) {
+        char **char_ptr_ptr = L;
+        while (*char_ptr_ptr != NULL) {
+            count++;
+            char_ptr_ptr++;
+        }
+    } else {
+        printf("Error: unsupported size.\n");
+        return -1;
+    }
+    
+    return count - 1;
+}
+
+
+void riffle_once(void *L, int size, void *work) {
+    int count = size_of_array(L, size);
     int half = count / 2;
     int l_index = 0;
     int r_index = half;
     char *l_ptr = (char *)L;
     char *w_ptr = (char *)work;
+
+    // printf("Before riffle_once:\n");
+    // for (int i = 0; i < count; i++) {
+    //     if (i == half) {
+    //         printf("| ");
+    //     }
+    //     if (size == sizeof(int)) {
+    //         printf("%d ", ((int*)L)[i]);
+    //     } else if (size == sizeof(char)) {
+    //         printf("%c ", ((char*)L)[i]);
+    //     }
+    // }
+    // printf("\n");
 
     for (int i = 0; i < count; i++) {
         if (l_index < half && (r_index >= count || rand() % 2 == 0)) {
@@ -22,18 +66,33 @@ void riffle_once(void *L, int size, int count, void *work) {
         w_ptr += size;
     }
 
+    // printf("After riffle_once:\n");
+    // for (int i = 0; i < count; i++) {
+    //     if (i == half) {
+    //         printf("| ");
+    //     }
+    //     if (size == sizeof(int)) {
+    //         printf("%d ", ((int*)work)[i]);
+    //     } else if (size == sizeof(char)) {
+    //         printf("%c ", ((char*)work)[i]);
+    //     }
+    // }
+    // printf("\n");
+
     memcpy(L, work, count * size);
 }
 
-void riffle(void *L, int size, int count, int N) {
+void riffle(void *L, int size, int N) {
+    int count = size_of_array(L, size);
     void *work = malloc(count * size);
 
     for (int i = 0; i < N; i++) {
-        riffle_once(L, size, count, work);
+        riffle_once(L, size, work);
     }
 
     free(work);
 }
+
 
 /**
  * Check whether a single riffle shuffle has been correctly performed on an integer array.
@@ -52,7 +111,7 @@ int check_shuffle(void *L, int size, int count) {
     // Allocate memory for a working array to be used during the shuffle
     void *work = malloc(count * size);
     // Perform a riffle shuffle on the input array
-    riffle_once(L, size, count, work);
+    riffle_once(L, size, work);
 
     // Cast the shuffled array back to an integer array
     int *shuffled = (int *)L;
@@ -106,7 +165,7 @@ int check_shuffle(void *L, int size, int count) {
 //             numbers[i] = i;
 //         }
 
-//         riffle(numbers, sizeof(int), N, t + 1);
+//         riffle(numbers, sizeof(int), t + 1);
 //         float q = quality(numbers, N);
 //         total_quality += q;
 
@@ -127,16 +186,22 @@ float quality(int *numbers, int n) {
 }
 
 float average_quality(int N, int trials) {
-    int *numbers = malloc(N * sizeof(int));
+    int *numbers = (int*)malloc((N+1) * sizeof(int));
+
+    
+
     float total_quality = 0;
     for (int i = 0; i < trials; i++) {
-        for (int j = 0; j < N; j++) {
-            numbers[j] = j;
+        for (int i = 0; i < N+1; i++) {
+            numbers[i] = i + 1;
         }
-        riffle(numbers, sizeof(int), N, i + 1);
+
+        riffle(numbers, sizeof(int), 7);
+
         total_quality += quality(numbers, N);
     }
     free(numbers);
     return total_quality / trials;
 }
+
 

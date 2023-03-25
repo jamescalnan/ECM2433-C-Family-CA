@@ -27,7 +27,7 @@ int main() {
         printf("%d\t%s\n", i, greek[i]);
     }
 
-    riffle(greek, sizeof(char *), count, N);
+    riffle(greek, sizeof(char *), N);
 
     printf("\nShuffled list after %d riffle shuffles:\n", N);
     for (int i = 0; i < count; i++) {
@@ -40,9 +40,9 @@ int main() {
     printf("\nOriginal integer list:\n");
     print_int_array(numbers, num_count);
 
-    N = 1;
+    N = 10;
 
-    riffle(numbers, sizeof(int), num_count, N);
+    riffle(numbers, sizeof(int), N);
 
     printf("\nShuffled integer list after %d riffle shuffles:\n", N);
     print_int_array(numbers, num_count);

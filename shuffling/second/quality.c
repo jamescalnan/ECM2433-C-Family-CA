@@ -9,8 +9,8 @@ int main() {
     int N = 50;
     int trials = 30;
 
-    printf("Riffle Shuffles Average Quality\n");
-    printf("--------------- --------------\n");
+    printf("Riffle Average Quality\n");
+    printf("------ --------------\n");
 
     for (int i = 1; i <= 15; i++) {
         float avg_quality = average_quality(N, trials);
