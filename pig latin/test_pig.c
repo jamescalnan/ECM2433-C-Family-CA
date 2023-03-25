@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include <stdlib.h> // Add this line
+#include <stdlib.h>
 #include "pig.h"
 
 void test(const char *word, const char *expected) {
     char *result = pig(word);
-    printf("%s => %s\n", word, result);
+    printf("%-10s => %-10s\n", word, result);
     free(result);
 }
 
