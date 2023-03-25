@@ -83,35 +83,60 @@ int check_shuffle(void *L, int size, int count) {
 }
 
 
-float quality(int *numbers, int count) {
-    int greater_count = 0;
+// float quality(int *numbers, int count) {
+//     int greater_count = 0;
 
-    for (int i = 1; i < count; i++) {
-        if (numbers[i] > numbers[i - 1]) {
-            greater_count++;
+//     for (int i = 1; i < count; i++) {
+//         if (numbers[i] > numbers[i - 1]) {
+//             greater_count++;
+//         }
+//     }
+
+//     return (float)greater_count / (count - 1);
+// }
+
+// float average_quality(int N, int trials) {
+//     srand(time(NULL));
+
+//     float total_quality = 0.0f;
+
+//     for (int t = 0; t < trials; t++) {
+//         int *numbers = malloc(N * sizeof(int));
+//         for (int i = 0; i < N; i++) {
+//             numbers[i] = i;
+//         }
+
+//         riffle(numbers, sizeof(int), N, t + 1);
+//         float q = quality(numbers, N);
+//         total_quality += q;
+
+//         free(numbers);
+//     }
+
+//     return total_quality / trials;
+// }
+
+float quality(int *numbers, int n) {
+    int count = 0;
+    for (int i = 0; i < n - 1; i++) {
+        if (numbers[i] < numbers[i + 1]) {
+            count++;
         }
     }
-
-    return (float)greater_count / (count - 1);
+    return (float)count / (n - 1);
 }
 
 float average_quality(int N, int trials) {
-    srand(time(NULL));
-
-    float total_quality = 0.0f;
-
-    for (int t = 0; t < trials; t++) {
-        int *numbers = malloc(N * sizeof(int));
-        for (int i = 0; i < N; i++) {
-            numbers[i] = i;
+    int *numbers = malloc(N * sizeof(int));
+    float total_quality = 0;
+    for (int i = 0; i < trials; i++) {
+        for (int j = 0; j < N; j++) {
+            numbers[j] = j;
         }
-
-        riffle(numbers, sizeof(int), N, t + 1);
-        float q = quality(numbers, N);
-        total_quality += q;
-
-        free(numbers);
+        riffle(numbers, sizeof(int), N, i + 1);
+        total_quality += quality(numbers, N);
     }
-
+    free(numbers);
     return total_quality / trials;
 }
+
