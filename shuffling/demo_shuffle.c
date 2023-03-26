@@ -1,119 +1,55 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <time.h>
 #include "riffle.h"
 
-#define NUM_INTS 20
-#define NUM_GREEK 12
-
-char *greek[] = { "alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta",
-                  "iota", "kappa", "lambda", "mu" };
+char *greek[] = {
+    "alpha", "beta", "gamma", "delta", "epsilon", "zeta",
+    "eta", "theta", "iota", "kappa", "lambda", "mu"
+};
 
 void print_int_array(int *arr, int size) {
-    printf("[ ");
     for (int i = 0; i < size; i++) {
         printf("%d ", arr[i]);
     }
-    printf("]\n");
-}
-
-void print_greek_array(char **arr, int size) {
-    printf("[ ");
-    for (int i = 0; i < size; i++) {
-        printf("%s ", arr[i]);
-    }
-    printf("]\n");
-}
-
-int check_shuffle_int(int *arr, int *shuffled_arr, int size) {
-    for (int i = 0; i < size; i++) {
-        int found = 0;
-        for (int j = 0; j < size; j++) {
-            if (arr[i] == shuffled_arr[j]) {
-                found = 1;
-                break;
-            }
-        }
-        if (!found) {
-            return 0;
-        }
-    }
-    for (int i = 0; i < size; i++) {
-        int found = 0;
-        for (int j = 0; j < size; j++) {
-            if (shuffled_arr[i] == arr[j]) {
-                found = 1;
-                break;
-            }
-        }
-        if (!found) {
-            return 0;
-        }
-    }
-    return 1;
-}
-
-int check_shuffle_greek(char **arr, char **shuffled_arr, int size) {
-    for (int i = 0; i < size; i++) {
-        int found = 0;
-        for (int j = 0; j < size; j++) {
-            if (strcmp(arr[i], shuffled_arr[j]) == 0) {
-                found = 1;
-                break;
-            }
-        }
-        if (!found) {
-            return 0;
-        }
-    }
-    for (int i = 0; i < size; i++) {
-        int found = 0;
-        for (int j = 0; j < size; j++) {
-            if (strcmp(shuffled_arr[i], arr[j]) == 0) {
-                found = 1;
-                break;
-            }
-        }
-        if (!found) {
-            return 0;
-        }
-    }
-    return 1;
+    printf("\n");
 }
 
 int main() {
-    int ints[NUM_INTS];
-    char *greek_shuffled[NUM_GREEK];
     srand(time(NULL));
 
-    // Initialize arrays
-    for (int i = 0; i < NUM_INTS; i++) {
-        ints[i] = i + 1;
+    int count = sizeof(greek) / sizeof(greek[0]);
+
+    int N = 1 + rand() % 7;
+
+    printf("Original list:\n");
+    for (int i = 0; i < count; i++) {
+        printf("%d\t%s\n", i, greek[i]);
     }
 
-    // Shuffle ints
-    riffle(ints, sizeof(int), NUM_INTS);
-    printf("Shuffled ints: ");
-    print_int_array(ints, NUM_INTS);
+    riffle(greek, sizeof(char *), N);
 
-    // Shuffle ints
-    riffle(ints, sizeof(int), NUM_INTS);
-    printf("Shuffled ints: ");
-    print_int_array(ints, NUM_INTS);
-
-    // Shuffle Greek
-    memcpy(greek_shuffled, greek, sizeof(greek));
-    riffle(greek_shuffled, sizeof(char*), NUM_GREEK);
-    printf("Shuffled Greek: ");
-    print_greek_array(greek_shuffled, NUM_GREEK);
-
-    // Check shuffled Greek
-    if (check_shuffle_greek(greek, greek_shuffled, NUM_GREEK)) {
-        printf("Greek shuffled correctly!\n");
-    } else {
-        printf("Error: Greek not shuffled correctly.\n");
+    printf("\nShuffled list after %d riffle shuffles:\n", N);
+    for (int i = 0; i < count; i++) {
+        printf("%d\t%s\n", i, greek[i]);
     }
+
+    int numbers[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+    int num_count = sizeof(numbers) / sizeof(numbers[0]);
+
+    printf("\nOriginal integer list:\n");
+    print_int_array(numbers, num_count);
+
+    N = 10;
+
+    riffle(numbers, sizeof(int), N);
+
+    printf("\nShuffled integer list after %d riffle shuffles:\n", N);
+    print_int_array(numbers, num_count);
+
+    int check_result = check_shuffle(numbers, sizeof(int), num_count);
+
+    printf("\nShuffle check result: %d\n", check_result);
 
     return 0;
 }
