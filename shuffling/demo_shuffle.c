@@ -9,7 +9,8 @@ char *greek[] = {
 };
 
 void print_int_array(int *arr, int size) {
-    for (int i = 0; i < size; i++) {
+    int i;
+    for (i = 0; i < size; i++) {
         printf("%d ", arr[i]);
     }
     printf("\n");
@@ -22,15 +23,17 @@ int main() {
 
     int N = 10;//N = 1 + rand() % 7;
 
+    int i;
+
     printf("Original list:\n");
-    for (int i = 0; i < count; i++) {
+    for (i = 0; i < count; i++) {
         printf("%d\t%s\n", i, greek[i]);
     }
 
     riffle(greek, sizeof(char *), N);
 
     printf("\nShuffled list after %d riffle shuffles:\n", N);
-    for (int i = 0; i < count; i++) {
+    for (i = 0; i < count; i++) {
         printf("%d\t%s\n", i, greek[i]);
     }
 

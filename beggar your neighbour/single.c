@@ -13,8 +13,10 @@ int main(int argc, char *argv[]) {
     int Nplayers = atoi(argv[1]);
     int deck[52];
 
+    int i;
+
     // Initialize and shuffle the deck
-    for (int i = 0; i < 52; i++) {
+    for (i = 0; i < 52; i++) {
         deck[i] = i % 13 + 2;
     }
     shuffle(deck, 52, time(NULL));

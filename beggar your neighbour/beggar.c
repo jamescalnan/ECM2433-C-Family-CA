@@ -12,7 +12,8 @@ Queue create_queue(int size, int total_players) {
     queue.size = size;
     queue.total_players = total_players;
 
-    for (int i = 0; i < size; i++) {
+    int i;
+    for (i = 0; i < size; i++) {
         queue.cards[i] = -1;
     }
 
@@ -74,11 +75,13 @@ Queue take_turn(Queue *player, Queue *pile, int *penalty) {
 int beggar(int Nplayers, int *deck, int talkative) {
     int deck_size = 52;
     Queue players[Nplayers];
-    for (int i = 0; i < Nplayers; i++) {
+    int i;
+
+    for (i = 0; i < Nplayers; i++) {
         players[i] = create_queue(deck_size, Nplayers);
     }
     
-    for (int i = 0; i < deck_size; i++) {
+    for (i = 0; i < deck_size; i++) {
         enqueue(&players[i % Nplayers], deck[i]);
     }
 
@@ -104,19 +107,21 @@ int beggar(int Nplayers, int *deck, int talkative) {
 
         if (talkative) {
             printf("Pile: ");
-            for (int i = pile.front; i != pile.rear; i = (i + 1) % pile.size) {
+            for (i = pile.front; i != pile.rear; i = (i + 1) % pile.size) {
                 printf("%d, ", pile.cards[i]);
             }
             printf("\n");
 
-            for (int i = 0; i < Nplayers; i++) {
+            for (i = 0; i < Nplayers; i++) {
                 if (i == current_player) {
                     printf("* %d: ", i);
                 } else {
                     printf("  %d: ", i);
                 }
 
-                for (int j = players[i].front; j != players[i].rear; j = (j + 1) % players[i].size) {
+                int j;
+
+                for (j = players[i].front; j != players[i].rear; j = (j + 1) % players[i].size) {
                     printf("%d, ", players[i].cards[j]);
                 }
                 printf("\n");
@@ -127,7 +132,7 @@ int beggar(int Nplayers, int *deck, int talkative) {
         free(reward.cards);
     }
 
-    for (int i = 0; i < Nplayers; i++) {
+    for (i = 0; i < Nplayers; i++) {
         free(players[i].cards);
     }
     
@@ -141,7 +146,8 @@ int beggar(int Nplayers, int *deck, int talkative) {
 int finished(Queue *players) {
     int empty_count = 0;
     int Nplayers = players[0].total_players;
-    for (int i = 0; i < Nplayers; i++) {
+    int i;
+    for (i = 0; i < Nplayers; i++) {
         if (!is_empty(&players[i]) && players[i].cards[players[i].front] != -1) {
             empty_count++;
         }
@@ -158,9 +164,12 @@ Stats statistics(int Nplayers, int games) {
 
     float total_turns = 0.0f;
 
-    for (int i = 0; i < games; i++) {
+    int i;
+
+    for (i = 0; i < games; i++) {
         int deck[52];
-        for (int j = 0; j < 52; j++) {
+        int j;
+        for (j = 0; j < 52; j++) {
             deck[j] = j % 13 + 2;
         }
 

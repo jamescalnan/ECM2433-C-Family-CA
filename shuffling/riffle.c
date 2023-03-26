@@ -42,7 +42,9 @@ void riffle_once(void *L, int size, void *work) {
     char *l_ptr = (char *)L;
     char *w_ptr = (char *)work;
 
-    for (int i = 0; i < count; i++) {
+    int i;
+
+    for (i = 0; i < count; i++) {
         if (l_index < half && (r_index >= count || rand() % 2 == 0)) {
             memcpy(w_ptr, l_ptr + l_index * size, size);
             l_index++;
@@ -60,7 +62,9 @@ void riffle(void *L, int size, int N) {
     int count = size_of_array(L, size);
     void *work = malloc(count * size);
 
-    for (int i = 0; i < N; i++) {
+    int i;
+
+    for (i = 0; i < N; i++) {
         riffle_once(L, size, work);
     }
 
@@ -80,11 +84,14 @@ int check_shuffle(void *L, int size) {
     // Perform a riffle shuffle on the input array
     riffle_once(L, size, work);
 
+    int i;
+
     // Iterate over the original array
-    for (int i = 0; i < count; i++) {
+    for (i = 0; i < count; i++) {
         int found = 0;
+        int j;
         // Iterate over the shuffled array
-        for (int j = 0; j < count; j++) {
+        for (j = 0; j < count; j++) {
             // Check if the original element exists in the shuffled array
             if (size == sizeof(char *)) { // It's an array of strings
                 if (strcmp(((char **)original)[i], ((char **)L)[j]) == 0) {
@@ -117,8 +124,10 @@ int check_shuffle(void *L, int size) {
 float quality(int *numbers) {
     int n = size_of_array(numbers, sizeof(int));
 
+    int i;
+
     int count = 0;
-    for (int i = 0; i < n - 1; i++) {
+    for (i = 0; i < n - 1; i++) {
         if (numbers[i] < numbers[i + 1]) {
             count++;
         }
@@ -132,10 +141,13 @@ float average_quality(int N, int trials) {
     
     int t = 30;
 
-    float total_quality = 0;
-    for (int i = 0; i < t; i++) {
+    int i;
 
-        for (int j = 0; j < N+1; j++) {
+    float total_quality = 0;
+    for (i = 0; i < t; i++) {
+        int j;
+
+        for (j = 0; j < N+1; j++) {
             numbers[j] = j + 1;
         }
 
