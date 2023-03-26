@@ -1,30 +1,41 @@
+// Include the standard input/output library for basic input/output operations
 #include <stdio.h>
+// Include the standard library for memory allocation and other utility functions
 #include <stdlib.h>
+// Include the string library for string manipulation and comparison functions
 #include <string.h>
+// Include the time library for generating random numbers
 #include <time.h>
 
-
+// Define a function to determine the size of an array of different types
 int size_of_array(void *L, int size) {
     int count = 0;
     
+    // Check if the array is of char type
     if (size == sizeof(char)) {
         char *char_ptr = L;
+        // Iterate through the array until a null character is found
         while (*char_ptr != '\0') {
             count++;
             char_ptr++;
         }
+    // Check if the array is of int type
     } else if (size == sizeof(int)) {
         int *int_ptr = L;
+        // Iterate through the array until a zero is found
         while (*int_ptr != 0) {
             count++;
             int_ptr++;
         }
+    // Check if the array is of char* type (array of strings)
     } else if (size == sizeof(char*)) {
         char **char_ptr_ptr = L;
+        // Iterate through the array until a NULL pointer is found
         while (*char_ptr_ptr != NULL) {
             count++;
             char_ptr_ptr++;
         }
+    // If the array is of an unsupported type, print an error message and return -1
     } else {
         printf("Error: unsupported size.\n");
         return -1;
@@ -33,7 +44,7 @@ int size_of_array(void *L, int size) {
     return count - 1;
 }
 
-
+// Define a function to perform a riffle shuffle once on a given array of any type
 void riffle_once(void *L, int size, void *work) {
     int count = size_of_array(L, size);
     int half = count / 2;
@@ -44,6 +55,7 @@ void riffle_once(void *L, int size, void *work) {
 
     int i;
 
+    // Iterate through the array, selecting elements from the left or right half randomly
     for (i = 0; i < count; i++) {
         if (l_index < half && (r_index >= count || rand() % 2 == 0)) {
             memcpy(w_ptr, l_ptr + l_index * size, size);
@@ -55,31 +67,34 @@ void riffle_once(void *L, int size, void *work) {
         w_ptr += size;
     }
 
+    // Copy the shuffled elements back into the original array
     memcpy(L, work, count * size);
 }
 
+// Define a function to perform a riffle shuffle N times on a given array of any type
 void riffle(void *L, int size, int N) {
     int count = size_of_array(L, size);
     void *work = malloc(count * size);
 
     int i;
 
+    // Perform the riffle shuffle N times
     for (i = 0; i < N; i++) {
         riffle_once(L, size, work);
     }
 
+    // Free the allocated memory for the work array
     free(work);
 }
 
-
+// Define a function to check if the riffle shuffle was performed correctly
 int check_shuffle(void *L, int size) {
     int count = size_of_array(L, size);
     // Allocate memory for a copy of the original array
     void *original = malloc(count * size);
     // Copy the original array to the newly allocated memory
     memcpy(original, L, count * size);
-
-    // Allocate memory for a working array to be used during the shuffle
+        // Allocate memory for a working array to be used during the shuffle
     void *work = malloc(count * size);
     // Perform a riffle shuffle on the input array
     riffle_once(L, size, work);
@@ -119,23 +134,24 @@ int check_shuffle(void *L, int size) {
     return 1;
 }
 
-
-
+// Define a function to calculate the quality of the shuffle
 float quality(int *numbers) {
     int n = size_of_array(numbers, sizeof(int));
 
     int i;
 
     int count = 0;
+    // Iterate through the array and count the number of increasing pairs
     for (i = 0; i < n - 1; i++) {
         if (numbers[i] < numbers[i + 1]) {
             count++;
         }
     }
+    // Calculate and return the quality as the ratio of increasing pairs to the total number of pairs
     return (float)count / (n - 1);
 }
 
-
+// Define a function to calculate the average quality of N riffle shuffles
 float average_quality(int N, int trials) {
     int *numbers = (int*)malloc((N+1) * sizeof(int));
     
@@ -144,6 +160,7 @@ float average_quality(int N, int trials) {
     int i;
 
     float total_quality = 0;
+    // Perform the riffle shuffle t times and calculate the total quality
     for (i = 0; i < t; i++) {
         int j;
 
@@ -155,8 +172,8 @@ float average_quality(int N, int trials) {
 
         total_quality += quality(numbers);
     }
+    // Free the allocated memory for the numbers array
     free(numbers);
+    // Calculate and return the average quality
     return total_quality / t;
 }
-
-

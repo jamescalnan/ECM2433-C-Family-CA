@@ -1,0 +1,11 @@
+$ ./byn.exe 10 100
+Number of Players  Shortest   Longest    Average
+2                  51         147        83
+3                  50         120        66
+4                  49         89         57
+5                  48         70         52
+6                  47         61         49
+7                  46         63         48
+8                  45         51         46
+9                  44         49         45
+10                 43         48         44

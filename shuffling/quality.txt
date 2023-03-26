@@ -1,0 +1,23 @@
+$ ./quality.exe
+Riffle Average Quality +- 0.5
+------ --------------- ------
+1      0.7598637938499 -0.260
+2      0.6489795446396 -0.149
+3      0.5768707394600 -0.077
+4      0.5346938967705 -0.035
+5      0.5197278857231 -0.020
+6      0.5034013986588 -0.003
+7      0.5204080939293 -0.020
+8      0.5068027377129 -0.007
+9      0.5047618746758 -0.005
+10     0.5081632733345 -0.008
+11     0.4965986311436  0.003
+12     0.5088435411453 -0.009
+13     0.5102041363716 -0.010
+14     0.5034013390541 -0.003
+15     0.4945578873158  0.005
+
+
+Based on the results above, it semes that after 5 shuffles the results of the average quality function become consistent.
+
+Except for an outlier, this being Riffle 7, the results of the average quality can be seen to be consistently close to 0.5 after the 5 shuffle as seen from the third column.
