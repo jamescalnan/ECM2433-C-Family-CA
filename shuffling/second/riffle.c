@@ -128,6 +128,7 @@ float quality(int *numbers) {
     return (float)count / (n - 1);
 }
 
+
 float average_quality(int N, int trials) {
     int *numbers = (int*)malloc((N+1) * sizeof(int));
     
