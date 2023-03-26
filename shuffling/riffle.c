@@ -1,10 +1,7 @@
-// Include the standard input/output library for basic input/output operations
+// Include necessary header files
 #include <stdio.h>
-// Include the standard library for memory allocation and other utility functions
 #include <stdlib.h>
-// Include the string library for string manipulation and comparison functions
 #include <string.h>
-// Include the time library for generating random numbers
 #include <time.h>
 
 // Define a function to determine the size of an array of different types
@@ -44,12 +41,19 @@ int size_of_array(void *L, int size) {
     return count - 1;
 }
 
-// Define a function to perform a riffle shuffle once on a given array of any type
+// Define a function to perform a single riffle shuffle
 void riffle_once(void *L, int size, void *work) {
+    // Calculate the number of elements in the array (L)
     int count = size_of_array(L, size);
+
+    // Split the array (L) into two halves
     int half = count / 2;
+
+    // Initialize indices for the left and right halves of the array
     int l_index = 0;
     int r_index = half;
+
+    // Cast the input array and work array as char pointers for easy manipulation
     char *l_ptr = (char *)L;
     char *w_ptr = (char *)work;
 
@@ -57,17 +61,23 @@ void riffle_once(void *L, int size, void *work) {
 
     // Iterate through the array, selecting elements from the left or right half randomly
     for (i = 0; i < count; i++) {
+        // If there are elements left in the left half, and either the right half is empty or the random
+        // decision is to pick from the left half, select the next element from the left half
         if (l_index < half && (r_index >= count || rand() % 2 == 0)) {
+            // Copy the selected element from the left half to the work array
             memcpy(w_ptr, l_ptr + l_index * size, size);
             l_index++;
         } else {
+            // If the left half is empty or the random decision is to pick from the right half,
+            // select the next element from the right half
             memcpy(w_ptr, l_ptr + r_index * size, size);
             r_index++;
         }
+        // Move the work array pointer forward by the size of one element
         w_ptr += size;
     }
 
-    // Copy the shuffled elements back into the original array
+    // After shuffling, copy the shuffled elements from the work array back into the original array (L)
     memcpy(L, work, count * size);
 }
 

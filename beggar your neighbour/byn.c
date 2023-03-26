@@ -1,3 +1,4 @@
+// Include necessary header files
 #include <stdio.h>
 #include <stdlib.h>
 #include "beggar.h"

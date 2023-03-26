@@ -1,4 +1,4 @@
-// Include necessary headers
+// Include necessary header files
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h> // Required for the 'free' function
