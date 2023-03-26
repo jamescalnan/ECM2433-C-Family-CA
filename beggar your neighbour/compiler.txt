@@ -1,3 +1,0 @@
-gcc -o single single.c beggar.c shuffle.c -lgsl -lgslcblas
-
-

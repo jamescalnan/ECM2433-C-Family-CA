@@ -1,4 +1,0 @@
-gcc -o demo_shuffle demo_shuffle.c riffle.c
-
-
-gcc quality.c riffle.c -o quality

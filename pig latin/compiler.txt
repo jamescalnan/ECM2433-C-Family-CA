@@ -1,2 +1,0 @@
-gcc -o piglatin piglatin.c pig.c
-gcc -o test_pig test_pig.c pig.c
