@@ -9,7 +9,7 @@ int main() {
     while (1) {
         printf("Enter a line of English text (empty line to quit): ");
         fgets(line, sizeof(line), stdin);
-        line[strcspn(line, "\n")] = '\0'; // Remove trailing newline
+        line[strcspn(line, "\n")] = '\0'; // remove trailing newline
 
         if (strlen(line) == 0) {
             break;

@@ -34,6 +34,43 @@ int dequeue(Queue *queue) {
     return card;
 }
 
+
+Queue take_turn(Queue *player, Queue *pile, int *penalty) {
+    Queue reward = create_queue(pile->size, player->total_players);
+
+    if (*penalty == 0) {
+        int card = dequeue(player);
+        enqueue(pile, card);
+
+        if (card >= 11) {
+            *penalty = 15 - card;
+        }
+    } else {
+        int card = dequeue(player);
+        enqueue(&reward, card);
+
+        if (card >= 11) {
+            *penalty = 15 - card;
+        } else {
+            (*penalty)--;
+        }
+
+        if (*penalty == 0) {
+            while (!is_empty(&reward)) {
+                int won_card = dequeue(&reward);
+                enqueue(player, won_card);
+            }
+
+            while (!is_empty(pile)) {
+                int won_card = dequeue(pile);
+                enqueue(player, won_card);
+            }
+        }
+    }
+
+    return reward;
+}
+
 int beggar(int Nplayers, int *deck, int talkative) {
     int deck_size = 52;
     Queue players[Nplayers];
@@ -46,7 +83,6 @@ int beggar(int Nplayers, int *deck, int talkative) {
     }
 
     Queue pile = create_queue(deck_size, Nplayers);
-    Queue reward = create_queue(deck_size, Nplayers);
     int current_player = 0;
     int turns = 0;
     int penalty = 0;
@@ -55,48 +91,40 @@ int beggar(int Nplayers, int *deck, int talkative) {
         turns++;
 
         if (talkative) {
-            printf("Turn %d: ", turns);
-        }
-
-        if (penalty == 0) {
-            int card = dequeue(&players[current_player]);
-            enqueue(&pile, card);
-
-            if (card >= 11) {
-                penalty = 15 - card;
-            }
-
-            if (talkative) {
-                printf("Player %d plays %d\n", current_player, card);
-            }
-        } else {
-            int card = dequeue(&players[current_player]);
-            enqueue(&reward, card);
-
-            if (card >= 11) {
-                penalty = 15 - card;
-            } else {
-                penalty--;
-            }
-
-            if (talkative) {
-                printf("Player %d plays %d\n", current_player, card);
-            }
+            printf("Turn %d ", turns);
 
             if (penalty == 0) {
-                while (!is_empty(&reward)) {
-                    int won_card = dequeue(&reward);
-                    enqueue(&players[current_player], won_card);
+                printf("Top card in pile is %d, so player %d should lay a single card\n", pile.cards[pile.front], current_player);
+            } else {
+                printf("Top card is %d, so player %d should lay %d penalty cards\n", pile.cards[pile.front], current_player, penalty);
+            }
+        }
+
+        Queue reward = take_turn(&players[current_player], &pile, &penalty);
+
+        if (talkative) {
+            printf("Pile: ");
+            for (int i = pile.front; i != pile.rear; i = (i + 1) % pile.size) {
+                printf("%d, ", pile.cards[i]);
+            }
+            printf("\n");
+
+            for (int i = 0; i < Nplayers; i++) {
+                if (i == current_player) {
+                    printf("* %d: ", i);
+                } else {
+                    printf("  %d: ", i);
                 }
 
-                while (!is_empty(&pile)) {
-                    int won_card = dequeue(&pile);
-                    enqueue(&players[current_player], won_card);
+                for (int j = players[i].front; j != players[i].rear; j = (j + 1) % players[i].size) {
+                    printf("%d, ", players[i].cards[j]);
                 }
+                printf("\n");
             }
         }
 
         current_player = (current_player + 1) % Nplayers;
+        free(reward.cards);
     }
 
     for (int i = 0; i < Nplayers; i++) {
@@ -104,10 +132,10 @@ int beggar(int Nplayers, int *deck, int talkative) {
     }
     
     free(pile.cards);
-    free(reward.cards);
     
     return turns;
 }
+
 
 
 int finished(Queue *players) {
