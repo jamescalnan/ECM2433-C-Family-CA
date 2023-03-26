@@ -4,12 +4,13 @@
 #include "beggar.h"
 #include "shuffle.h"
 
-Queue create_queue(int size) {
+Queue create_queue(int size, int total_players) {
     Queue queue;
     queue.cards = malloc(size * sizeof(int));
     queue.front = 0;
     queue.rear = 0;
     queue.size = size;
+    queue.total_players = total_players;
 
     for (int i = 0; i < size; i++) {
         queue.cards[i] = -1;
@@ -37,20 +38,20 @@ int beggar(int Nplayers, int *deck, int talkative) {
     int deck_size = 52;
     Queue players[Nplayers];
     for (int i = 0; i < Nplayers; i++) {
-        players[i] = create_queue(deck_size);
+        players[i] = create_queue(deck_size, Nplayers);
     }
     
     for (int i = 0; i < deck_size; i++) {
         enqueue(&players[i % Nplayers], deck[i]);
     }
-    
-    Queue pile = create_queue(deck_size);
-    Queue reward = create_queue(deck_size);
+
+    Queue pile = create_queue(deck_size, Nplayers);
+    Queue reward = create_queue(deck_size, Nplayers);
     int current_player = 0;
     int turns = 0;
     int penalty = 0;
 
-    while (!finished(players, Nplayers)) {
+    while (!finished(players)) { 
         turns++;
 
         if (talkative) {
@@ -79,7 +80,7 @@ int beggar(int Nplayers, int *deck, int talkative) {
             }
 
             if (talkative) {
-                printf("Player %d pays %d\n", current_player, card);
+                printf("Player %d plays %d\n", current_player, card);
             }
 
             if (penalty == 0) {
@@ -108,8 +109,10 @@ int beggar(int Nplayers, int *deck, int talkative) {
     return turns;
 }
 
-int finished(Queue *players, int Nplayers) {
+
+int finished(Queue *players) {
     int empty_count = 0;
+    int Nplayers = players[0].total_players;
     for (int i = 0; i < Nplayers; i++) {
         if (!is_empty(&players[i]) && players[i].cards[players[i].front] != -1) {
             empty_count++;

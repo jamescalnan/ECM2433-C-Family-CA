@@ -7,14 +7,14 @@ int main() {
     srand(time(NULL));
     
     int N = 50;
-    int runs = 15;
 
-    printf("Riffle Average Quality\n");
-    printf("------ ---------------\n");
+    printf("Riffle Average Quality +- 0.5\n");
+    printf("------ --------------- ------\n");
 
-    for (int i = 1; i <= runs; i++) {
+    for (int i = 1; i <= 15; i++) {
         float avg_quality = average_quality(N, i);
-        printf("%-6d %.13f\n", i, avg_quality);
+        float diff = 0.5 - avg_quality;
+        printf("%-6d %13.13f %6.3f\n", i, avg_quality, diff);
     }
 
     return 0;

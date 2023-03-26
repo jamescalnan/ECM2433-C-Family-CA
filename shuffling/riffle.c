@@ -68,17 +68,10 @@ void riffle(void *L, int size, int N) {
 }
 
 
-/**
- * Check whether a single riffle shuffle has been correctly performed on an integer array.
- * 
- * @param L A pointer to the integer array to be checked.
- * @param size The size of each element in the array (in bytes).
- * @param count The number of elements in the array.
- * @return 1 if the shuffle has been correctly performed, 0 otherwise.
- */
-int check_shuffle(void *L, int size, int count) {
+int check_shuffle(void *L, int size) {
+    int count = size_of_array(L, size);
     // Allocate memory for a copy of the original array
-    int *original = malloc(count * size);
+    void *original = malloc(count * size);
     // Copy the original array to the newly allocated memory
     memcpy(original, L, count * size);
 
@@ -87,18 +80,22 @@ int check_shuffle(void *L, int size, int count) {
     // Perform a riffle shuffle on the input array
     riffle_once(L, size, work);
 
-    // Cast the shuffled array back to an integer array
-    int *shuffled = (int *)L;
-
     // Iterate over the original array
     for (int i = 0; i < count; i++) {
         int found = 0;
         // Iterate over the shuffled array
         for (int j = 0; j < count; j++) {
             // Check if the original element exists in the shuffled array
-            if (original[i] == shuffled[j]) {
-                found = 1;
-                break;
+            if (size == sizeof(char *)) { // It's an array of strings
+                if (strcmp(((char **)original)[i], ((char **)L)[j]) == 0) {
+                    found = 1;
+                    break;
+                }
+            } else { // It's an array of integers
+                if (((int *)original)[i] == ((int *)L)[j]) {
+                    found = 1;
+                    break;
+                }
             }
         }
         // If the original element is not found in the shuffled array, return 0
@@ -114,6 +111,7 @@ int check_shuffle(void *L, int size, int count) {
     free(work);
     return 1;
 }
+
 
 
 float quality(int *numbers) {

@@ -6,6 +6,7 @@ typedef struct {
     int front;
     int rear;
     int size;
+    int total_players;
 } Queue;
 
 typedef struct {
@@ -16,6 +17,6 @@ typedef struct {
 
 int beggar(int Nplayers, int *deck, int talkative);
 Stats statistics(int Nplayers, int games);
-int finished(Queue *players, int Nplayers);
+int finished(Queue *players);
 
 #endif // BEGGAR_H
