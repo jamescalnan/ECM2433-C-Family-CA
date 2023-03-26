@@ -4,7 +4,7 @@
 void riffle_once(void *L, int size, void *work);
 void riffle(void *L, int size, int N);
 int check_shuffle(void *L, int size, int elem_size);
-float quality(int *numbers, int n);
+float quality(int *numbers);
 float average_quality(int N, int trials);
 
 #endif // RIFFLE_H

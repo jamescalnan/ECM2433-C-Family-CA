@@ -116,7 +116,9 @@ int check_shuffle(void *L, int size, int count) {
 }
 
 
-float quality(int *numbers, int n) {
+float quality(int *numbers) {
+    int n = size_of_array(numbers, sizeof(int));
+
     int count = 0;
     for (int i = 0; i < n - 1; i++) {
         if (numbers[i] < numbers[i + 1]) {
@@ -128,19 +130,22 @@ float quality(int *numbers, int n) {
 
 float average_quality(int N, int trials) {
     int *numbers = (int*)malloc((N+1) * sizeof(int));
+    
+    int t = 30;
 
     float total_quality = 0;
-    for (int i = 0; i < trials; i++) {
-        for (int i = 0; i < N+1; i++) {
-            numbers[i] = i + 1;
+    for (int i = 0; i < t; i++) {
+
+        for (int j = 0; j < N+1; j++) {
+            numbers[j] = j + 1;
         }
 
-        riffle(numbers, sizeof(int), N);
+        riffle(numbers, sizeof(int), trials);
 
-        total_quality += quality(numbers, N);
+        total_quality += quality(numbers);
     }
     free(numbers);
-    return total_quality / trials;
+    return total_quality / t;
 }
 
 
