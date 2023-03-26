@@ -42,19 +42,6 @@ void riffle_once(void *L, int size, void *work) {
     char *l_ptr = (char *)L;
     char *w_ptr = (char *)work;
 
-    // printf("Before riffle_once:\n");
-    // for (int i = 0; i < count; i++) {
-    //     if (i == half) {
-    //         printf("| ");
-    //     }
-    //     if (size == sizeof(int)) {
-    //         printf("%d ", ((int*)L)[i]);
-    //     } else if (size == sizeof(char)) {
-    //         printf("%c ", ((char*)L)[i]);
-    //     }
-    // }
-    // printf("\n");
-
     for (int i = 0; i < count; i++) {
         if (l_index < half && (r_index >= count || rand() % 2 == 0)) {
             memcpy(w_ptr, l_ptr + l_index * size, size);
@@ -65,19 +52,6 @@ void riffle_once(void *L, int size, void *work) {
         }
         w_ptr += size;
     }
-
-    // printf("After riffle_once:\n");
-    // for (int i = 0; i < count; i++) {
-    //     if (i == half) {
-    //         printf("| ");
-    //     }
-    //     if (size == sizeof(int)) {
-    //         printf("%d ", ((int*)work)[i]);
-    //     } else if (size == sizeof(char)) {
-    //         printf("%c ", ((char*)work)[i]);
-    //     }
-    // }
-    // printf("\n");
 
     memcpy(L, work, count * size);
 }
@@ -142,39 +116,6 @@ int check_shuffle(void *L, int size, int count) {
 }
 
 
-// float quality(int *numbers, int count) {
-//     int greater_count = 0;
-
-//     for (int i = 1; i < count; i++) {
-//         if (numbers[i] > numbers[i - 1]) {
-//             greater_count++;
-//         }
-//     }
-
-//     return (float)greater_count / (count - 1);
-// }
-
-// float average_quality(int N, int trials) {
-//     srand(time(NULL));
-
-//     float total_quality = 0.0f;
-
-//     for (int t = 0; t < trials; t++) {
-//         int *numbers = malloc(N * sizeof(int));
-//         for (int i = 0; i < N; i++) {
-//             numbers[i] = i;
-//         }
-
-//         riffle(numbers, sizeof(int), t + 1);
-//         float q = quality(numbers, N);
-//         total_quality += q;
-
-//         free(numbers);
-//     }
-
-//     return total_quality / trials;
-// }
-
 float quality(int *numbers, int n) {
     int count = 0;
     for (int i = 0; i < n - 1; i++) {
@@ -188,15 +129,13 @@ float quality(int *numbers, int n) {
 float average_quality(int N, int trials) {
     int *numbers = (int*)malloc((N+1) * sizeof(int));
 
-    
-
     float total_quality = 0;
     for (int i = 0; i < trials; i++) {
         for (int i = 0; i < N+1; i++) {
             numbers[i] = i + 1;
         }
 
-        riffle(numbers, sizeof(int), 7);
+        riffle(numbers, sizeof(int), N);
 
         total_quality += quality(numbers, N);
     }
