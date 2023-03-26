@@ -11,7 +11,7 @@ typedef struct {
 typedef struct {
     int shortest;
     int longest;
-    int average;
+    float average;
 } Stats;
 
 int beggar(int Nplayers, int *deck, int talkative);

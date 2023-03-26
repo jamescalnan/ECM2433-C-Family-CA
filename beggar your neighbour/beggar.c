@@ -10,6 +10,11 @@ Queue create_queue(int size) {
     queue.front = 0;
     queue.rear = 0;
     queue.size = size;
+
+    for (int i = 0; i < size; i++) {
+        queue.cards[i] = -1;
+    }
+
     return queue;
 }
 
@@ -106,7 +111,7 @@ int beggar(int Nplayers, int *deck, int talkative) {
 int finished(Queue *players, int Nplayers) {
     int empty_count = 0;
     for (int i = 0; i < Nplayers; i++) {
-        if (is_empty(&players[i])) {
+        if (!is_empty(&players[i]) && players[i].cards[players[i].front] != -1) {
             empty_count++;
         }
     }
@@ -118,9 +123,9 @@ Stats statistics(int Nplayers, int games) {
     Stats stats;
     stats.shortest = 100000;
     stats.longest = 0;
-    stats.average = 0;
+    stats.average = 0.0f;
 
-    int total_turns = 0;
+    float total_turns = 0.0f;
 
     for (int i = 0; i < games; i++) {
         int deck[52];
@@ -131,7 +136,7 @@ Stats statistics(int Nplayers, int games) {
         shuffle(deck, 52, -1);
 
         int turns = beggar(Nplayers, deck, 0);
-        total_turns += turns;
+        total_turns += (float)turns;
 
         if (turns < stats.shortest) {
             stats.shortest = turns;
@@ -140,9 +145,15 @@ Stats statistics(int Nplayers, int games) {
         if (turns > stats.longest) {
             stats.longest = turns;
         }
+
     }
 
-    stats.average = total_turns / games;
+    if (stats.shortest == 100000) {
+        stats.average = -1.0f;
+    } else {
+        stats.average = total_turns / (float) games;
+    }
 
     return stats;
 }
+

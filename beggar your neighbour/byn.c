@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
 
     for (int Nplayers = 2; Nplayers <= max_players; Nplayers++) {
         Stats stats = statistics(Nplayers, trials);
-        printf("For %d players: shortest = %d, longest = %d, average = %.2f\n", Nplayers, stats.shortest, stats.longest, stats.average);
+        printf("For %d players: shortest = %d, longest = %d, average = %.0f\n", Nplayers, stats.shortest, stats.longest, stats.average);
     }
 
     return 0;
